@@ -5,8 +5,10 @@ const upgradeDefinitions = [
     id: "focus",
     name: "Prism Focus",
     description: "+1 shard per tap",
-    baseCost: 15,
-    growth: 1.2,
+    type: "click",
+    effect: 1,
+    baseCost: 10,
+    growth: 1.18,
     accent: "#66ffd0",
     icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3"></path></svg>',
   },
@@ -14,28 +16,89 @@ const upgradeDefinitions = [
     id: "drone",
     name: "Pulse Drone",
     description: "+2 shards every second",
-    baseCost: 80,
-    growth: 1.22,
+    type: "passive",
+    effect: 2,
+    baseCost: 50,
+    growth: 1.2,
     accent: "#54cfff",
     icon: '<svg viewBox="0 0 24 24"><path d="m12 3 7.8 4.5v9L12 21l-7.8-4.5v-9L12 3Z"></path><path d="m8.5 10 3.5-2 3.5 2v4L12 16l-3.5-2v-4Z"></path></svg>',
   },
   {
+    id: "lens",
+    name: "Resonance Lens",
+    description: "+5 shards per tap",
+    type: "click",
+    effect: 5,
+    baseCost: 125,
+    growth: 1.21,
+    accent: "#9cecff",
+    icon: '<svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"></circle><path d="m14.5 14.5 5 5M10 6v8M6 10h8"></path></svg>',
+  },
+  {
     id: "array",
     name: "Solar Array",
-    description: "+8 shards every second",
-    baseCost: 360,
-    growth: 1.25,
+    description: "+10 shards every second",
+    type: "passive",
+    effect: 10,
+    baseCost: 300,
+    growth: 1.23,
     accent: "#8a82ff",
     icon: '<svg viewBox="0 0 24 24"><path d="M5 5h14v11H5zM8 5v11M12 5v11M16 5v11M5 9h14M5 13h14M12 16v5M8 21h8"></path></svg>',
   },
   {
+    id: "capacitor",
+    name: "Echo Capacitor",
+    description: "+25 shards per tap",
+    type: "click",
+    effect: 25,
+    baseCost: 900,
+    growth: 1.24,
+    accent: "#e58aff",
+    icon: '<svg viewBox="0 0 24 24"><path d="M8 4v16M16 4v16M4 9h4M16 9h4M4 15h4M16 15h4"></path><path d="M8 7h8v10H8z"></path></svg>',
+  },
+  {
     id: "reactor",
     name: "Void Reactor",
-    description: "+35 shards every second",
+    description: "+60 shards every second",
+    type: "passive",
+    effect: 60,
     baseCost: 1800,
-    growth: 1.28,
+    growth: 1.25,
     accent: "#ff9d66",
     icon: '<svg viewBox="0 0 24 24"><path d="M9 3h6l4.5 4.5v9L15 21H9l-4.5-4.5v-9L9 3Z"></path><circle cx="12" cy="12" r="4"></circle><path d="m12 8 2 4-2 4-2-4 2-4Z"></path></svg>',
+  },
+  {
+    id: "lattice",
+    name: "Quantum Lattice",
+    description: "+300 shards every second",
+    type: "passive",
+    effect: 300,
+    baseCost: 9500,
+    growth: 1.27,
+    accent: "#ff6fae",
+    icon: '<svg viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"></path><path d="m4 7.5 8 4.5 8-4.5M12 12v9M8 5.2l8 13.6M16 5.2 8 18.8"></path></svg>',
+  },
+  {
+    id: "foundry",
+    name: "Stellar Foundry",
+    description: "+1,500 shards every second",
+    type: "passive",
+    effect: 1500,
+    baseCost: 50000,
+    growth: 1.29,
+    accent: "#ffd166",
+    icon: '<svg viewBox="0 0 24 24"><path d="M5 20h14M7 20V9l5-5 5 5v11"></path><path d="M9 12h6M9 16h6M12 4v16"></path></svg>',
+  },
+  {
+    id: "singularity",
+    name: "Singularity Engine",
+    description: "+7,500 shards every second",
+    type: "passive",
+    effect: 7500,
+    baseCost: 250000,
+    growth: 1.31,
+    accent: "#ff657b",
+    icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M12 2c3.3 0 4.5 3.2 2.7 5.4M22 12c0 3.3-3.2 4.5-5.4 2.7M12 22c-3.3 0-4.5-3.2-2.7-5.4M2 12c0-3.3 3.2-4.5 5.4-2.7"></path><path d="M5 5c2.3-2.3 5.4-.9 5.7 2M19 5c2.3 2.3.9 5.4-2 5.7M19 19c-2.3 2.3-5.4.9-5.7-2M5 19c-2.3-2.3-.9-5.4 2-5.7"></path></svg>',
   },
 ];
 
@@ -112,7 +175,9 @@ function loadState() {
 }
 
 function getBasePerClick(targetState = state) {
-  return 1 + targetState.upgrades.focus;
+  return 1 + upgradeDefinitions
+    .filter((upgrade) => upgrade.type === "click")
+    .reduce((total, upgrade) => total + targetState.upgrades[upgrade.id] * upgrade.effect, 0);
 }
 
 function getComboMultiplier() {
@@ -127,11 +192,9 @@ function getPerClick() {
 }
 
 function getPerSecond(targetState = state) {
-  return (
-    targetState.upgrades.drone * 2 +
-    targetState.upgrades.array * 8 +
-    targetState.upgrades.reactor * 35
-  );
+  return upgradeDefinitions
+    .filter((upgrade) => upgrade.type === "passive")
+    .reduce((total, upgrade) => total + targetState.upgrades[upgrade.id] * upgrade.effect, 0);
 }
 
 function getCost(upgrade, level) {
@@ -169,7 +232,8 @@ function buyUpgrade(id) {
 
   const purchase = getPurchase(upgrade);
   if (!purchase.affordable) {
-    showToast("INSUFFICIENT LUMEN SHARDS");
+    const missing = Math.max(0, purchase.totalCost - state.currency);
+    showToast(`NEED ${formatNumber(missing)} MORE LUMEN SHARDS`);
     playTone(130, 0.055, "square", 0.02);
     return;
   }
@@ -273,14 +337,16 @@ function renderUpgrades() {
     .map((upgrade) => {
       const level = state.upgrades[upgrade.id];
       const purchase = getPurchase(upgrade);
-      const amountLabel = selectedBulk === "max" ? `MAX ${purchase.quantity}` : `BUY ×${purchase.quantity}`;
+      const amountLabel = purchase.affordable
+        ? selectedBulk === "max" ? `BUY MAX · ${purchase.quantity}` : `BUY ×${purchase.quantity}`
+        : "NEED";
 
       return `
         <button
           class="upgrade-card ${purchase.affordable ? "affordable" : ""}"
           type="button"
           data-upgrade="${upgrade.id}"
-          ${purchase.affordable ? "" : "disabled"}
+          aria-disabled="${String(!purchase.affordable)}"
           aria-label="Buy ${purchase.quantity} ${upgrade.name} for ${formatNumber(purchase.totalCost)} shards"
         >
           <span class="upgrade-icon" style="--accent: ${upgrade.accent}">${upgrade.icon}</span>

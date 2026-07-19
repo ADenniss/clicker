@@ -879,19 +879,18 @@ kbd {
   transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
 }
 
-.upgrade-card:hover:not(:disabled) {
+.upgrade-card:hover {
   transform: translateY(-1px);
   border-color: var(--line-bright);
   background: rgba(102, 255, 208, 0.035);
 }
 
-.upgrade-card:active:not(:disabled) {
+.upgrade-card:active {
   transform: translateY(1px);
 }
 
-.upgrade-card:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
+.upgrade-card[aria-disabled="true"] {
+  opacity: 0.62;
 }
 
 .upgrade-card.affordable {
