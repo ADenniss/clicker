@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Lumen</title>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop stop-color="#050b14"/>
+      <stop offset=".55" stop-color="#0b2030"/>
+      <stop offset="1" stop-color="#254b63"/>
+    </linearGradient>
+    <radialGradient id="core">
+      <stop stop-color="#e7fff7"/>
+      <stop offset=".28" stop-color="#66ffd0"/>
+      <stop offset="1" stop-color="#1e9476" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <path d="M8 20h48M8 32h48M8 44h48M20 8v48M32 8v48M44 8v48" stroke="#99bdc5" stroke-opacity=".09"/>
+  <rect x="15" y="15" width="34" height="34" rx="9" fill="#66ffd0" fill-opacity=".05" stroke="#66ffd0" stroke-opacity=".55" transform="rotate(45 32 32)"/>
+  <circle cx="32" cy="32" r="15" fill="url(#core)" opacity=".55"/>
+  <rect x="27" y="27" width="10" height="10" rx="3" fill="#baffea"/>
+  <rect x="18" y="18" width="5" height="5" rx="1.5" fill="#66ffd0"/>
+  <rect x="41" y="41" width="5" height="5" rx="1.5" fill="#66ffd0"/>
+</svg>
